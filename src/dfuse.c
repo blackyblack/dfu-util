@@ -34,7 +34,7 @@
 #define DFU_TIMEOUT 5000
 
 extern int verbose;
-static unsigned int last_erased = 0;
+static int last_erased = -1;
 static struct memsegment *mem_layout;
 static unsigned int dfuse_address = 0;
 static unsigned int dfuse_length = 0;

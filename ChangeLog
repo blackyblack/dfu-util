@@ -1,3 +1,9 @@
+2013-07-01: Andrew Lekar <sam.and.tetris@gmail.com>	
+
+0.7a:
+	o Erase at 0 address fixed
+        o Windows readme
+
 0.7:
 	o Support for TI Stellaris devices (Tommi Keisala)
 	o Fix libusb detection on MacOSX (Marc Singer)

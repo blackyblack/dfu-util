@@ -1,0 +1,48 @@
+Windows binaries can be built in a MinGW environment, on a Windows computer or cross-hosted in another OS. 
+To build it on a Ubuntu 12.04 host, follow this instruction:
+
+- Install build dependencies:
+  sudo apt-get build-dep libusb-1.0-0 dfu-util
+  sudo apt-get install mingw32
+
+- Prepare environment:
+  export BUILD_DIR=/tmp/mingw
+  export MINGW_VERSION=i586-mingw32msvc
+  cd $BUILD_DIR
+
+- Get libusbx:
+  wget -O libusb-1.0.14.tar.bz2 http://sourceforge.net/projects/libusbx/files/releases/1.0.14/source/libusbx-1.0.14.tar.bz2/download
+  tar jxvf libusb-1.0.14.tar.bz2
+  cd libusbx-1.0.14
+
+- Apply libusbx Windows patch:
+  wget https://github.com/libusbx/libusbx/commit/09759d5836766fb3b886824cd669bc0dfc149d00.patch
+  patch -p1 < 09759d5836766fb3b886824cd669bc0dfc149d00.patch
+
+- Build libusbx:
+  PKG_CONFIG_PATH=$BUILD_DIR/lib/pkgconfig ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR
+  make
+  make install
+  cd ..
+
+- Get dfu-util:
+  git clone git://gitorious.org/dfu-util/dfu-util.git
+  cd dfu-util
+
+- Build dfu-util:
+  ./autogen.sh
+  PKG_CONFIG_PATH=$BUILD_DIR/lib/pkgconfig ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR
+  make
+  make install
+
+Now you have dfu-util.exe, dfu-suffix.exe and libusb-1.0.dll in /tmp/mingw/bin.
+
+You can optionally build static executable (without libusb*.dll):
+
+- Build dfu-util-static:
+  ./autogen.sh
+  export LDFLAGS=-static
+  PKG_CONFIG_PATH=$BUILD_DIR/lib/pkgconfig ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR
+  make
+  make install
+  mv $BUILD_DIR/bin/dfu-util.exe $BUILD_DIR/bin/dfu-util-static.exe
