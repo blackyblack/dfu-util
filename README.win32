@@ -1,4 +1,5 @@
-Windows binaries can be built in a MinGW environment, on a Windows computer or cross-hosted in another OS. 
+Windows binaries can be built in a MinGW environment, on a Windows computer or cross-hosted in another OS.
+Libusbx is patched to get composite interface devices with HID interface working.
 To build it on a Ubuntu 12.04 host, follow this instruction:
 
 - Install build dependencies:
@@ -11,22 +12,18 @@ To build it on a Ubuntu 12.04 host, follow this instruction:
   cd $BUILD_DIR
 
 - Get libusbx:
-  wget -O libusb-1.0.14.tar.bz2 http://sourceforge.net/projects/libusbx/files/releases/1.0.14/source/libusbx-1.0.14.tar.bz2/download
-  tar jxvf libusb-1.0.14.tar.bz2
-  cd libusbx-1.0.14
-
-- Apply libusbx Windows patch:
-  wget https://github.com/libusbx/libusbx/commit/09759d5836766fb3b886824cd669bc0dfc149d00.patch
-  patch -p1 < 09759d5836766fb3b886824cd669bc0dfc149d00.patch
+  git clone https://github.com/blackyblack/libusbx
+  cd libusbx
 
 - Build libusbx:
+  ./autogen.sh
   PKG_CONFIG_PATH=$BUILD_DIR/lib/pkgconfig ./configure --host=$MINGW_VERSION --prefix=$BUILD_DIR
   make
   make install
   cd ..
 
 - Get dfu-util:
-  git clone git://gitorious.org/dfu-util/dfu-util.git
+  git clone https://github.com/blackyblack/dfu-util
   cd dfu-util
 
 - Build dfu-util:

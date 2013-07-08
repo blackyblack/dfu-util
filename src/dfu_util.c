@@ -218,6 +218,7 @@ static int get_serial(struct dfu_if *dfu_if, unsigned char *serial)
 	return ret;
 }
 
+
 /* Retrieves alternate interface name string.
  * Returns string length, or negative on error */
 int get_alt_name(struct dfu_if *dfu_if, unsigned char *name)
@@ -237,6 +238,7 @@ int get_alt_name(struct dfu_if *dfu_if, unsigned char *name)
 	ret = -1;
 	if (alt_name_str_idx) {
 		libusb_device_handle *dev_handle = dfu_if->dev_handle;
+                libusb_set_selected_if(dev, dfu_if->interface);
 
 		if (!dev_handle) {
 			libusb_open(dfu_if->dev, &dev_handle);
