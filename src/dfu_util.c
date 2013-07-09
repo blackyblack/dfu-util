@@ -205,6 +205,7 @@ static int get_serial(struct dfu_if *dfu_if, unsigned char *serial)
 		return -1;
 	if (desc.iSerialNumber == 0)
 		return -1;
+	libusb_set_selected_if(dev, dfu_if->interface);
 	if (!dev_handle) {
 		libusb_open(dfu_if->dev, &dev_handle);
 	}
@@ -384,7 +385,6 @@ int iterate_dfu_devices(libusb_context *ctx, struct dfu_if *dif,
 			if (serial_filter) {
 				unsigned char serial[MAX_DESC_STR_LEN+1];
 				int ret;
-
 				ret = libusb_open(dev, &dif->dev_handle);
 				if (ret || !dif->dev_handle) {
 					fprintf(stderr, "Cannot open device\n");
